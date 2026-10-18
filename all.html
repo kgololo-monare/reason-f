@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Little Gift for Larona</title>
+
+  <style>
+    :root {
+      --pink: #c83e68;
+      --dark-pink: #a92e54;
+      --text: #542a3a;
+      --muted: #76505e;
+      --soft-pink: #fff0f4;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #fff0f4, #ffe1eb);
+    }
+
+    .card {
+      width: min(100%, 680px);
+      padding: 32px 24px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid white;
+      border-radius: 24px;
+      box-shadow: 0 18px 50px rgba(117, 42, 72, 0.15);
+    }
+
+    .heart {
+      font-size: 44px;
+      animation: beat 1.2s infinite;
+    }
+
+    h1 {
+      margin: 8px 0;
+      color: #b8325a;
+    }
+
+    .intro {
+      margin: 0 auto 22px;
+      max-width: 490px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 9px;
+      margin: 22px 0;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 18px;
+      color: white;
+      background: var(--pink);
+      font-size: 0.96rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    button:hover {
+      background: var(--dark-pink);
+      transform: translateY(-2px);
+    }
+
+    button:focus-visible {
+      outline: 3px solid #542a3a;
+      outline-offset: 3px;
+    }
+
+    .menu button {
+      color: var(--pink);
+      background: var(--soft-pink);
+    }
+
+    .menu button:hover,
+    .menu button.active {
+      color: white;
+      background: var(--pink);
+    }
+
+    .section {
+      display: none;
+      margin-top: 22px;
+      padding: 22px;
+      border-radius: 18px;
+      background: #fff8fa;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section h2 {
+      margin-top: 0;
+      color: #b8325a;
+    }
+
+    .message {
+      min-height: 76px;
+      display: grid;
+      place-items: center;
+      margin: 18px 0;
+      padding: 18px;
+      border-radius: 15px;
+      background: var(--soft-pink);
+      font-size: 1.12rem;
+      line-height: 1.5;
+    }
+
+    .choices {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .signature {
+      margin-top: 24px;
+      color: var(--muted);
+    }
+
+    @keyframes beat {
+      50% {
+        transform: scale(1.15);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card">
+    <div class="heart" aria-hidden="true">💗</div>
+    <h1>A Little Gift for Larona</h1>
+    <p class="intro">
+      I made this just for you. Pick a little surprise below 💌
+    </p>
+
+    <nav class="menu" aria-label="Choose a surprise">
+      <button class="tab active" data-section="reasons">Reasons 💖</button>
+      <button class="tab" data-section="quiz">Love quiz 🎯</button>
+      <button class="tab" data-section="memories">Memory jar 🫙</button>
+      <button class="tab" data-section="adventure">Mini adventure ✨</button>
+    </nav>
+
+    <section id="reasons" class="section active">
+      <h2>Reasons I Love You</h2>
+      <p>Tap for a little reminder, Larona.</p>
+      <div id="reasonMessage" class="message" aria-live="polite">
+        You make ordinary moments feel special.
+      </div>
+      <button id="reasonButton">Another reason 💌</button>
+    </section>
+
+    <section id="quiz" class="section">
+      <h2>A Tiny Love Quiz</h2>
+      <p id="quizQuestion">What do I love most about you?</p>
+      <div class="choices" id="quizChoices"></div>
+      <div id="quizMessage" class="message" aria-live="polite">
+        Pick an answer to see your surprise 😊
+      </div>
+    </section>
+
+    <section id="memories" class="section">
+      <h2>Our Memory Jar</h2>
+      <p>Tap the jar to open a little memory or a note from me.</p>
+      <div id="memoryMessage" class="message" aria-live="polite">
+        There are little notes waiting inside 🫙
+      </div>
+      <button id="memoryButton">Open a note ✨</button>
+    </section>
+
+    <section id="adventure" class="section">
+      <h2>A Mini Adventure</h2>
+      <p id="adventureText">Larona, you find a little note with your name on it. What do you do?</p>
+      <div class="choices" id="adventureChoices"></div>
+    </section>
+
+    <p class="signature">Made with love, from Freedom 💌</p>
+  </main>
+
+  <script>
+    // Change or add reasons to make them personal to Larona.
+    const reasons = [
+      "I love how your smile can make a difficult day feel lighter.",
+      "I love how thoughtful you are with the people you care about.",
+      "I love hearing you talk about the things that make you excited.",
+      "I love the way we can laugh together over little things.",
+      "I love your kindness, even in the small things you do.",
+      "I love the memories we're making together.",
+      "I love being able to be myself when I'm with you.",
+      "I love you for being wonderfully and completely yourself."
+    ];
+
+    // Add real shared moments here, if you like.
+    const memories = [
+      "One of my favorite things is getting to share little moments with you.",
+      "I hope we keep making memories that make us both smile.",
+      "Even an ordinary day feels better when I get to talk to you.",
+      "This little page is one more memory from Freedom to Larona 💌"
+    ];
+
+    let reasonIndex = 0;
+    let memoryIndex = 0;
+
+    document.getElementById("reasonButton").addEventListener("click", () => {
+      document.getElementById("reasonMessage").textContent =
+        reasons[reasonIndex];
+      reasonIndex = (reasonIndex + 1) % reasons.length;
+    });
+
+    document.getElementById("memoryButton").addEventListener("click", () => {
+      document.getElementById("memoryMessage").textContent =
+        memories[memoryIndex];
+      memoryIndex = (memoryIndex + 1) % memories.length;
+    });
+
+    // Simple playful quiz.
+    const quizOptions = [
+      "Your smile 😊",
+      "Your kind heart 💗",
+      "All of you ✨"
+    ];
+
+    const quizChoices = document.getElementById("quizChoices");
+
+    quizOptions.forEach((answer) => {
+      const button = document.createElement("button");
+      button.textContent = answer;
+      button.addEventListener("click", () => {
+        document.getElementById("quizMessage").textContent =
+          answer === "All of you ✨"
+            ? "Correct! I love all of you, Larona 💖"
+            : "That’s one of the many things I love about you! The real answer is all of you 💖";
+      });
+      quizChoices.appendChild(button);
+    });
+
+    // A tiny choose-your-own-adventure.
+    const adventureText = document.getElementById("adventureText");
+    const adventureChoices = document.getElementById("adventureChoices");
+
+    function showAdventureChoices(choices) {
+      adventureChoices.innerHTML = "";
+
+      choices.forEach((choice) => {
+        const button = document.createElement("button");
+        button.textContent = choice.label;
+        button.addEventListener("click", choice.action);
+        adventureChoices.appendChild(button);
+      });
+    }
+
+    function startAdventure() {
+      adventureText.textContent =
+        "You open the note. It says: “Larona, you make my world brighter.” What next?";
+      showAdventureChoices([
+        {
+          label: "Keep reading 💌",
+          action: () => {
+            adventureText.textContent =
+              "The note continues: “Thank you for being you. I hope this made you smile.” The end—for now. From Freedom 💗";
+            showAdventureChoices([
+              {
+                label: "Read it again 😊",
+                action: startAdventure
+              }
+            ]);
+          }
+        },
+        {
+          label: "Send Freedom a smile 😊",
+          action: () => {
+            adventureText.textContent =
+              "Adventure complete! Freedom hopes this made you smile, Larona 💗";
+            showAdventureChoices([
+              {
+                label: "Start again ✨",
+                action: startAdventure
+              }
+            ]);
+          }
+        }
+      ]);
+    }
+
+    showAdventureChoices([
+      {
+        label: "Open the note 💌",
+        action: startAdventure
+      },
+      {
+        label: "Look for a heart 💗",
+        action: () => {
+          adventureText.textContent =
+            "You find a little heart with a message: “You are appreciated, Larona.” From Freedom 💗";
+          showAdventureChoices([
+            {
+              label: "Start again ✨",
+              action: startAdventure
+            }
+          ]);
+        }
+      }
+    ]);
+
+    // Switch between the four parts of the page.
+    const tabs = document.querySelectorAll(".tab");
+    const sections = document.querySelectorAll(".section");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((item) => item.classList.remove("active"));
+        sections.forEach((section) => section.classList.remove("active"));
+
+        tab.classList.add("active");
+        document.getElementById(tab.dataset.section).classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>
